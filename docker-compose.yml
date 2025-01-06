@@ -1,0 +1,43 @@
+version: "3.5"
+services:
+  localstack:
+    container_name: "${LOCALSTACK_DOCKER_NAME:-localstack-main}"
+    image: localstack/localstack
+    ports:
+      - "127.0.0.1:4566:4566"            # LocalStack Gateway
+      - "127.0.0.1:4510-4559:4510-4559"  # external services port range
+    environment:
+      # LocalStack configuration: https://docs.localstack.cloud/references/configuration/
+      - DEBUG=${DEBUG:-0}
+    volumes:
+      - "${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+
+  aws-environment:
+    image: 'amazon/aws-cli:latest'
+    environment:
+      AWS_ACCESS_KEY_ID: dev123
+      AWS_SECRET_ACCESS_KEY: dev123
+      AWS_DEFAULT_REGION: us-east-1
+    entrypoint: /bin/sh -c
+    command: |
+      "
+        sleep 5
+
+        # Create queue trp-nupay-resolve-transaction-sqs
+        aws sqs create-queue --endpoint-url=http://localstack:4566 --queue-name queue-1
+        aws sqs create-queue --endpoint-url=http://localstack:4566 --queue-name queue-2
+        aws sqs create-queue --endpoint-url=http://localstack:4566 --queue-name queue-3
+        aws sqs create-queue --endpoint-url=http://localstack:4566 --queue-name queue-4
+        aws sqs create-queue --endpoint-url=http://localstack:4566 --queue-name queue-5
+        aws sqs create-queue --endpoint-url=http://localstack:4566 --queue-name queue-6
+        aws sqs create-queue --endpoint-url=http://localstack:4566 --queue-name queue-7
+        aws sqs create-queue --endpoint-url=http://localstack:4566 --queue-name queue-8
+        aws sqs create-queue --endpoint-url=http://localstack:4566 --queue-name queue-9
+        aws sqs create-queue --endpoint-url=http://localstack:4566 --queue-name queue-10
+
+        # Create topic trp-payments-generated-nupay-sns
+        # aws sns create-topic --endpoint-url=http://localstack:4566 --name topic-step-1
+        # aws sns create-topic --endpoint-url=http://localstack:4566 --name topic-step-2
+
+      "

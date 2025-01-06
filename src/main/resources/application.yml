@@ -1,0 +1,38 @@
+logging:
+  level:
+    io.awspring.cloud: debug
+
+spring:
+  application:
+    name: sqs-listener
+  sleuth:
+    messaging:
+      sqs:
+        enabled: true
+  cloud:
+    aws:
+      credentials:
+        access-key: dev123
+        secret-key: dev123
+      endpoint: http://localhost:4566
+      sqs:
+        region: us-east-1
+        enabled: true
+        endpoint: http://sqs.us-east-1.localhost.localstack.cloud:4566/
+
+# swagger-ui custom path
+springdoc:
+  show-actuator: true
+  swagger-ui:
+    path: /swagger-ui
+  api-docs:
+    path: /api-docs
+
+
+management:
+  server:
+    port: 9000
+  endpoints:
+    web:
+      exposure:
+        include: "*"
