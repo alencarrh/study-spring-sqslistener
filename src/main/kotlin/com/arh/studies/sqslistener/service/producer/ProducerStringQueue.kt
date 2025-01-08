@@ -15,7 +15,7 @@ class ProducerStringQueue(private val sqsTemplate: SqsTemplate) {
     while (isActive) {
       sqsTemplate.send("queue-1", "Message ${i++}")
       logger.info { "QUEUE-1:: Message sent: Message $i" }
-      sqsTemplate.send() { to -> to.queue("queue-1").payload("Message ${i++}") }
+      sqsTemplate.send { to -> to.queue("queue-1").payload("Message ${i++}") }
       logger.info { "QUEUE-1::Message sent: Message $i" }
       Thread.sleep(2000)
     }

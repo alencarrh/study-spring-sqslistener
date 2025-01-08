@@ -11,7 +11,7 @@ class ConsumerMessage2Queue {
 
   private val logger = KotlinLogging.logger {}
 
-  @SqsListener(id = "queue-2-consumer", value = ["queue-2"])
+  @SqsListener(id = "queue-2-consumer", value = ["queue-2"], )
   fun listener(message: Message2, @Headers headers: Map<String, Any>) {
     println(message.toString())
 
